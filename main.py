@@ -25,8 +25,44 @@ Feel free to use this bot to get the latest recipes, very biased reviews and ran
 """
     await update.message.reply_text(about_text, parse_mode=ParseMode.MARKDOWN_V2)
 
+
+async def matcha101_command(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None : 
+    matcha101_text = """
+
+*WHY MATCHA 🍵* 
+
+Matcha is a powdered green tea where you drink the entire leaf 🌱, giving you more nutrients than regular steeped tea
+
+*Key Health Benefits*
+🧠 Improved Brain Function 
+❤️‍🔥 Better Heart Health 
+🏋️ Weight Management
+💪 Antioxidant Power 
+
+*Quick Tips for Maximum Benefit*
+• Start small ¼ tsp to adjust to the taste
+• Store properly in fridge to preserve nutrients
+• Can mix with water or milk based on preference
+• No special equipment needed for basic \preparation
+
+
+"""
+    await update.message.reply_text(matcha101_text, parse_mode=ParseMode.MARKDOWN_V2)
+
+async def channel_command(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None : 
+    channel_text = """
+
+Join my matcha Tele channel 😎  https://t.me/+QxqtsjTl5dZlMmM1
+
+"""
+    await update.message.reply_text(channel_text, parse_mode= None)
+
 async def recipes_command(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None : 
     await recipes_buttons(update, context)
+
+
+async def quiz_command(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None : 
+    await quiz_buttons(update, context)
 
 
 async def reviews_command(update: Update, context:ContextTypes.DEFAULT_TYPE) : 
@@ -127,7 +163,42 @@ async def button_selection_handler(update: Update, context: ContextTypes.DEFAULT
     await query.edit_message_text(recipe_text, parse_mode=ParseMode.MARKDOWN_V2)
 
        
+async def quiz_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    keyboard = [
+        [InlineKeyboardButton("Chanoyu", callback_data='quiz_1')],
+        [InlineKeyboardButton("Gyokuro", callback_data='quiz_2')],
+        [InlineKeyboardButton("Sencha", callback_data='quiz_3')],
+        [InlineKeyboardButton("Matcha-do", callback_data='quiz_4')],
+    
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text('What is the traditional Japanese tea ceremony called?', reply_markup=reply_markup)
 
+
+async def quiz_button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    query = update.callback_query
+    if query.data.split("_")[1] == '1':
+        recipe_text = """
+        You are correct! 
+"""
+      
+
+    if query.data.split("_")[1] == '2' : 
+        recipe_text = """
+        You are wrong! 
+"""
+
+    if query.data.split("_")[1] == '3' : 
+            recipe_text = """
+            You are wrong! 
+"""
+
+    if query.data.split("_")[1] == '4' : 
+            recipe_text = """
+            You are wrong! 
+"""
+        
+    await query.edit_message_text(recipe_text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 if __name__ == '__main__' : 
@@ -138,8 +209,12 @@ if __name__ == '__main__' :
     app.add_handler(CommandHandler('start', start_command))
     app.add_handler(CommandHandler('about', about_command))
     app.add_handler(CommandHandler('recipes', recipes_command))
+    app.add_handler(CommandHandler('matcha101', matcha101_command))
+    app.add_handler(CommandHandler('channel', channel_command))
     app.add_handler(CommandHandler('reviews', reviews_command))
-    app.add_handler(CallbackQueryHandler(button_selection_handler))
+    app.add_handler(CallbackQueryHandler(button_selection_handler, pattern='^button_'))
+    app.add_handler(CallbackQueryHandler(quiz_button_handler, pattern='^quiz_'))
+    
 
     # Messages 
     app.add_handler(MessageHandler(filters.TEXT, handle_message))
