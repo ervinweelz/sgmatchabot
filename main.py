@@ -3,7 +3,7 @@ import json
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
-from commands import about_command
+from commands import about_command, matcha101_command
 
 
 TOKEN: Final = '7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00'
@@ -33,13 +33,13 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 #         parse_mode=ParseMode.MARKDOWN_V2 if cmd_data.get('parse_mode') == 'MarkdownV2' else None
 #     )
 
-async def matcha101_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    data = load_json_data()
-    cmd_data = data['commands']['matcha101']
-    await update.message.reply_text(
-        cmd_data['text'],
-        parse_mode=ParseMode.MARKDOWN_V2 if cmd_data.get('parse_mode') == 'MarkdownV2' else None
-    )
+# async def matcha101_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+#     data = load_json_data()
+#     cmd_data = data['commands']['matcha101']
+#     await update.message.reply_text(
+#         cmd_data['text'],
+#         parse_mode=ParseMode.MARKDOWN_V2 if cmd_data.get('parse_mode') == 'MarkdownV2' else None
+#     )
 
 async def channel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = load_json_data()
@@ -142,10 +142,11 @@ if __name__ == '__main__':
     # Commands
     app.add_handler(CommandHandler('start', start_command))
     app.add_handler(CommandHandler('about', about_command.about))
+    app.add_handler(CommandHandler('matcha101', matcha101_command.matcha101))
     # app.add_handler(CommandHandler('about', about_command))
     app.add_handler(CommandHandler('recipes', recipes_command))
     app.add_handler(CommandHandler('quiz', quiz_command))
-    app.add_handler(CommandHandler('matcha101', matcha101_command))
+    # app.add_handler(CommandHandler('matcha101', matcha101_command))
     app.add_handler(CommandHandler('channel', channel_command))
     app.add_handler(CommandHandler('reviews', reviews_command))
 

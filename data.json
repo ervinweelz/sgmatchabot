@@ -4,11 +4,11 @@
             "response": "Welcome my fellow Matcha lovers 🍵"
         },
         "about": {
-            "text": "*SGMATCHA* 🤖\nHi there fellow matcha lovers 💚 , this is a bot I have created to document down my journey in SG 🇸🇬 so far into the world of matcha 🍵\nFeel free to use this bot to get the latest recipes, very biased reviews and random content that I'll be adding here 😎\n\n*disclaimer* : I am in no way an expert in matcha, this serves as my matcha journal for everyone to read",
+            "text": "🤖 SGMATCHA 🤖\nHi there fellow matcha lovers 💚 , this is a bot I have created to document down my journey in SG 🇸🇬 so far into the world of matcha 🍵\n\nFeel free to use this bot to get the latest recipes, very biased reviews and random content that I'll be adding here 😎\n\nDisclaimer : I am in no way an expert in matcha, this serves as my matcha journal for everyone to read",
             "parse_mode": "MarkdownV2"
         },
         "matcha101": {
-            "text": "*WHY MATCHA 🍵*\nMatcha is a powdered green tea where you drink the entire leaf 🌱, giving you more nutrients than regular steeped tea 🤯\n\n*Key Health Benefits*\n🧠 Improved Brain Function\n❤️‍🔥 Better Heart Health\n🏋️ Weight Management\n💪 Antioxidant Power\n\n*Quick Tips for Maximum Benefit*\n• Start small ¼ tsp to adjust to the taste\n• Store properly in fridge to preserve nutrients\n• Can mix with water or milk based on preference\n• No special equipment needed for basic preparation",
+            "text": "🍵 WHY MATCHA 🍵\nMatcha is a powdered green tea where you drink the entire leaf 🌱, giving you more nutrients than regular steeped tea 🤯\n\nKey Health Benefits\n🧠 Improved Brain Function\n❤️‍🔥 Better Heart Health\n🏋️ Weight Management\n💪 Antioxidant Power\n\nQuick Tips for Maximum Benefit\n• Start small ¼ tsp to adjust to the taste\n• Store properly in fridge to preserve nutrients\n• Can mix with water or milk based on preference\n• No special equipment needed for basic preparation",
             "parse_mode": "MarkdownV2"
         },
         "channel": {
