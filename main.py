@@ -1,257 +1,164 @@
-from typing import Final 
-from telegram import Update , InlineKeyboardButton, InlineKeyboardMarkup
+from typing import Final
+import json
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes , CallbackQueryHandler
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
+from commands import about_command
 
 
-TOKEN : Final = '7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00'
-BOT_USERNAME : Final = 'sgmatchabot'
+TOKEN: Final = '7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00'
+BOT_USERNAME: Final = 'sgmatchabot'
 
+def load_json_data() -> dict:
+    """Load data from JSON file."""
+    try:
+        with open('data.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("Error: Could not find data.json file")
+        raise
+    except json.JSONDecodeError:
+        print("Error: Invalid JSON format in data.json")
+        raise
 
-# Commands 
-async def start_command(update: Update, context:ContextTypes.DEFAULT_TYPE) : 
-    await update.message.reply_text('Welcome my fellow Matcha lovers 🍵')
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_json_data()
+    await update.message.reply_text(data['commands']['start']['response'])
 
+# async def about_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+#     data = load_json_data()
+#     cmd_data = data['commands']['about']
+#     await update.message.reply_text(
+#         cmd_data['text'],
+#         parse_mode=ParseMode.MARKDOWN_V2 if cmd_data.get('parse_mode') == 'MarkdownV2' else None
+#     )
 
-async def about_command(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None : 
-    about_text = """
+async def matcha101_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_json_data()
+    cmd_data = data['commands']['matcha101']
+    await update.message.reply_text(
+        cmd_data['text'],
+        parse_mode=ParseMode.MARKDOWN_V2 if cmd_data.get('parse_mode') == 'MarkdownV2' else None
+    )
 
-*SGMATCHA* 🤖
+async def channel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_json_data()
+    cmd_data = data['commands']['channel']
+    await update.message.reply_text(cmd_data['text'], 
+                                  parse_mode=None if cmd_data.get('parse_mode') is None else ParseMode.HTML)
 
-Hi there fellow matcha lovers 💚 , this is a bot I have created to document down my journey in SG 🇸🇬 so far into the world of matcha 🍵
-
-Feel free to use this bot to get the latest recipes, very biased reviews and random content that I'll be adding \here 😎
- 
-*disclaimer* : I am in no way an expert in matcha, this serves as my matcha journal for everyone to read 
-"""
-    await update.message.reply_text(about_text, parse_mode=ParseMode.MARKDOWN_V2)
-
-
-async def matcha101_command(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None : 
-    matcha101_text = """
-
-*WHY MATCHA 🍵* 
-
-Matcha is a powdered green tea where you drink the entire leaf 🌱, giving you more nutrients than regular steeped tea 🤯
-
-*Key Health Benefits*
-🧠 Improved Brain Function 
-❤️‍🔥 Better Heart Health 
-🏋️ Weight Management
-💪 Antioxidant Power 
-
-*Quick Tips for Maximum Benefit*
-• Start small ¼ tsp to adjust to the taste
-• Store properly in fridge to preserve nutrients
-• Can mix with water or milk based on preference
-• No special equipment needed for basic \preparation
-
-
-"""
-    await update.message.reply_text(matcha101_text, parse_mode=ParseMode.MARKDOWN_V2)
-
-async def channel_command(update: Update, context:ContextTypes.DEFAULT_TYPE)  : 
-    channel_text = """
-
-Join my matcha Tele channel 😎  https://t.me/+QxqtsjTl5dZlMmM1
-
-"""
-    await update.message.reply_text(channel_text, parse_mode= None)
-
-async def recipes_command(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None : 
-    await recipes_buttons(update, context)
-
-
-async def quiz_command(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None : 
-    await quiz_buttons(update, context)
-
-
-async def reviews_command(update: Update, context:ContextTypes.DEFAULT_TYPE)  -> None : 
-    await reviews_buttons(update, context)
-    # await update.message.reply_text('Reviews coming Soon!')
-
-
-
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) : 
-    message_type: str = update.message.chat.type 
-    text : str = update.message.chat.type 
-
-    print(f'User ({update.message.chat.id}) in {message_type}: "{text}"')
-
-    if message_type == 'group' : 
-        if BOT_USERNAME in text : 
-            new_text : str = text.replace(BOT_USERNAME, '').strip()
-            response : str = handle_response(new_text)
-        else : 
-            return 
-    
-    else : 
-        response: str = handle_response(text)
-    
-    print('Bot: ', response)
-
-    await update.message.reply_text(response)
-
-
-# Responses
-
-def handle_response(text:str) -> str : 
-    processed: str = text.lower()
-
-    if 'hello' in processed : 
-        return 'Hey there!'
-    
-    if 'how are you' in processed : 
-        return 'I am good'
-    
-    return 'Please try again'
-
-
-async def error(update: Update, context: ContextTypes.DEFAULT_TYPE) : 
-    print(f'Update {update} caused error {context.error}')
-
-
-async def recipes_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    keyboard = [
-        [InlineKeyboardButton("🍵 Usucha", callback_data='button_1')],
-        [InlineKeyboardButton("🍵🥛 Matcha Latte", callback_data='button_2')],
-    
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+async def recipes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_json_data()
+    keyboard = [InlineKeyboardButton(button['text'], callback_data=button['callback_data'])
+               for button in data['recipes']['buttons']]
+    reply_markup = InlineKeyboardMarkup([keyboard])
     await update.message.reply_text('Select your recipe to view', reply_markup=reply_markup)
 
-async def button_selection_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def recipes_button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_json_data()
     query = update.callback_query
+    
     if query.data.split("_")[1] == '1':
-        recipe_text = """
+        recipe = data['recipes']['usucha']
+        recipe_text = f"""
 🍵 *Usucha Recipe*
-
 🌿 *Ingredients*
-• 4g of Matcha Powder
-• 120ml of non boiling water, about 80°C 
-
+{'\n• '.join(recipe['ingredients'])}
 📝 *Directions*
-• Soften Whisk in 80°C water
-• Sieve 1 scoop of powder
-• Add 20ml to blend powder
-• Add in remaining water
-• Whisk for 2 mins in a bowl, no grains and foamy 
-• Enjoy 🤤
+{'\n'.join(f'• {step}' for step in recipe['directions'])}
 """
-      
-
-    if query.data.split("_")[1] == '2' : 
-        recipe_text = """
+    elif query.data.split("_")[1] == '2':
+        recipe = data['recipes']['matcha_latte']
+        recipe_text = f"""
 🍵🥛 *Matcha Latte Recipe*
-
-🌿 *Ingredients* 
-• 6g of Matcha Powder 
-• 30ml of non boiling water, about 80°C
-• 120ml of oat milk, prefably oatside barista
-• 1 tsp sugar
-
-📝 *Directions* 
-• Soften Whisk in 80 deg water for 5 mins
-• Sieve 2 scoops of powder
-• Add 30ml of water
-• Whisk for 2 mins in a bowl, no grains and thick consistency
-• Whisk in sugar
-• Prepare Cup, add Ice
-• Add oatmilk into cup
-• Add the whisked Matcha slowly
-• Enjoy 🤤
+🌿 *Ingredients*
+{'\n• '.join(recipe['ingredients'])}
+📝 *Directions*
+{'\n'.join(f'• {step}' for step in recipe['directions'])}
 """
-        
+
     await query.edit_message_text(recipe_text, parse_mode=ParseMode.MARKDOWN_V2)
 
+async def reviews_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_json_data()
+    keyboard = [InlineKeyboardButton(button['text'], callback_data=button['callback_data'])
+               for button in data['reviews']['buttons']]
+    reply_markup = InlineKeyboardMarkup([keyboard])
+    await update.message.reply_text('Select your review category', reply_markup=reply_markup)
 
-async def reviews_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    keyboard = [
-        [InlineKeyboardButton("Matcha Brands", callback_data='review_1')],
-        [InlineKeyboardButton("Cafes in SG 🇸🇬 ", callback_data='review_2')],
-    
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text('Select your recipe to view', reply_markup=reply_markup)
+async def quiz_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_json_data()
+    keyboard = [InlineKeyboardButton(option['text'], callback_data=option['data'])
+                for option in data['quiz']['options']]
+    reply_markup = InlineKeyboardMarkup([keyboard])
+    await update.message.reply_text(data['quiz']['question'], reply_markup=reply_markup)
 
-async def reviews_button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def quiz_button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_json_data()
     query = update.callback_query
-    if query.data.split("_")[1] == '1':
-        review_text = """
-        Coming Soon 🌚
-"""
-      
-
-    if query.data.split("_")[1] == '2' : 
-        review_text = """
-        Coming Soon 🌚
-"""
-        
-    await query.edit_message_text(review_text, parse_mode=ParseMode.MARKDOWN_V2)
-
-
-       
-async def quiz_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    keyboard = [
-        [InlineKeyboardButton("Chanoyu", callback_data='quiz_1')],
-        [InlineKeyboardButton("Gyokuro", callback_data='quiz_2')],
-        [InlineKeyboardButton("Sencha", callback_data='quiz_3')],
-        [InlineKeyboardButton("Matcha-do", callback_data='quiz_4')],
     
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text('What is the traditional Japanese tea ceremony called 🤔', reply_markup=reply_markup)
+    for option in data['quiz']['options']:
+        if query.data == option['data']:
+            if option.get('correct'):
+                response = "✅ *Wa so smart*"
+            else:
+                response = "❌ " + option.get('incorrect_response', 'Incorrect answer')
+            
+            await query.edit_message_text(response, parse_mode=ParseMode.MARKDOWN_V2)
+            return
 
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message_type = update.message.chat.type
+    text = update.message.text
+    print(f'User ({update.message.chat.id}) in {message_type}: "{text}"')
+    
+    if message_type == 'group':
+        if BOT_USERNAME in text:
+            new_text = text.replace(BOT_USERNAME, '').strip()
+            response = handle_response(new_text)
+        else:
+            return
+    else:
+        response = handle_response(text)
+    
+    print('Bot: ', response)
+    await update.message.reply_text(response)
 
-async def quiz_button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    query = update.callback_query
-    if query.data.split("_")[1] == '1':
-        quiz_text = """
-         ✅ *Wa so smart*
-"""
-      
+def handle_response(text: str) -> str:
+    processed = text.lower()
+    if 'hello' in processed:
+        return 'Hey there!'
+    if 'how are you' in processed:
+        return 'I am good'
+    return 'Please try again'
 
-    if query.data.split("_")[1] == '2' : 
-        quiz_text = """
-         ❌ *Gyokuro* is a type of green tea from Japan
-"""
+async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(f'Update {update} caused error {context.error}')
 
-    if query.data.split("_")[1] == '3' : 
-            quiz_text = """
-        ❌ *Sencha* is a type of Japanese green tea which is prepared by infusing the processed whole tea leaves in hot water
-"""
-
-    if query.data.split("_")[1] == '4' : 
-            quiz_text = """
-        ❌ *Matcha\-do* is the way of matcha \(I think\)
-"""
-        
-    await query.edit_message_text(quiz_text, parse_mode=ParseMode.MARKDOWN_V2)
-
-
-if __name__ == '__main__' : 
+if __name__ == '__main__':
     print('Starting bot...')
     app = Application.builder().token(TOKEN).build()
 
     # Commands
     app.add_handler(CommandHandler('start', start_command))
-    app.add_handler(CommandHandler('about', about_command))
+    app.add_handler(CommandHandler('about', about_command.about))
+    # app.add_handler(CommandHandler('about', about_command))
     app.add_handler(CommandHandler('recipes', recipes_command))
     app.add_handler(CommandHandler('quiz', quiz_command))
     app.add_handler(CommandHandler('matcha101', matcha101_command))
     app.add_handler(CommandHandler('channel', channel_command))
     app.add_handler(CommandHandler('reviews', reviews_command))
-    app.add_handler(CallbackQueryHandler(reviews_button_handler, pattern='^review_'))
-    app.add_handler(CallbackQueryHandler(button_selection_handler, pattern='^button_'))
-    app.add_handler(CallbackQueryHandler(quiz_button_handler, pattern='^quiz_'))
-    
 
-    # Messages 
+    # Callback handlers
+    # app.add_handler(CallbackQueryHandler(reviews_button_handler, pattern='^review_'))
+    app.add_handler(CallbackQueryHandler(recipes_button_handler, pattern='^button_'))
+    app.add_handler(CallbackQueryHandler(quiz_button_handler, pattern='^quiz_'))
+
+    # Messages
     app.add_handler(MessageHandler(filters.TEXT, handle_message))
 
-    # Errors 
+    # Errors
     app.add_error_handler(error)
 
-    #polls the bot 
     print('Polling...')
     app.run_polling(poll_interval=3)
