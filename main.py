@@ -3,7 +3,7 @@ import json
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
-from commands import about_command, matcha101_command, channel_command, recipes_command, quiz_command
+from commands import about_command, matcha101_command, channel_command, recipes_command, quiz_command , reviews_command
 
 
 TOKEN: Final = '7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00'
@@ -25,13 +25,6 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = load_json_data()
     await update.message.reply_text(data['commands']['start']['response'])
 
-
-async def reviews_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    data = load_json_data()
-    keyboard = [InlineKeyboardButton(button['text'], callback_data=button['callback_data'])
-               for button in data['reviews']['buttons']]
-    reply_markup = InlineKeyboardMarkup([keyboard])
-    await update.message.reply_text('Select your review category', reply_markup=reply_markup)
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -73,7 +66,7 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler('recipes', recipes_command.recipes))
     app.add_handler(CommandHandler('quiz', quiz_command.quiz))
     app.add_handler(CommandHandler('channel', channel_command.channel))
-    app.add_handler(CommandHandler('reviews', reviews_command))
+    app.add_handler(CommandHandler('reviews', reviews_command.reviews))
 
     # Callback handlers
     # app.add_handler(CallbackQueryHandler(reviews_button_handler, pattern='^review_'))
