@@ -6,5 +6,6 @@ __all__ = [
    
     'about_command',
     'match101_command',
-    'channel_command'
+    'channel_command', 
+    'recipes_command'
 ]
