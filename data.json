@@ -30,12 +30,36 @@
             "directions": ["Soften Whisk in 80 deg water for 5 mins", "Sieve 2 scoops of powder", "Add 30ml of water", "Whisk for 2 mins in a bowl, no grains and thick consistency", "Whisk in sugar", "Prepare Cup, add Ice", "Add oatmilk into cup", "Add the whisked Matcha slowly", "Enjoy 🤤"]
         }
     },
-    "reviews": {
+   "reviews": {
         "buttons": [
-            {"text": "Matcha Brands", "callback_data": "review_1"},
-            {"text": "Cafes in SG 🇸🇬 ", "callback_data": "review_2"}
+            {
+                "text": "Matcha Brands",
+                "callback_data": "review_matcha_brands"
+            },
+            {
+                "text": "Service Review",
+                "callback_data": "review_service"
+            }
+        ],
+        "brands": [
+            {
+                "text": "Kaminari Issa Silver",
+                "callback_data": "brand_ippodo",
+                "review": "A premium matcha from Ippodo Tea Co. Known for its balanced umami flavor and smooth finish. Perfect for ceremonial use."
+            },
+            {
+                "text": "Maru Matcha",
+                "callback_data": "brand_maru",
+                "review": "High-quality matcha powder with vibrant green color. Offers excellent value for daily consumption."
+            },
+            {
+                "text": "Aiya",
+                "callback_data": "brand_aiya",
+                "review": "Professional-grade matcha used by many cafes worldwide. Rich in antioxidants with deep umami taste."
+            }
         ]
-    },
+    }
+       , 
     "quiz": {
         "question": "What is the traditional Japanese tea ceremony called 🤔",
         "options": [

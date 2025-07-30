@@ -72,6 +72,9 @@ if __name__ == '__main__':
     # app.add_handler(CallbackQueryHandler(reviews_button_handler, pattern='^review_'))
     app.add_handler(CallbackQueryHandler(recipes_command.recipes_button_handler, pattern='^button_'))
     app.add_handler(CallbackQueryHandler(quiz_command.quiz_button_handler, pattern='^quiz_'))
+# In the Application setup section, add:
+    app.add_handler(CallbackQueryHandler(reviews_command.reviews_button_handler, pattern='^review_'))
+    
 
     # Messages
     app.add_handler(MessageHandler(filters.TEXT, handle_message))
