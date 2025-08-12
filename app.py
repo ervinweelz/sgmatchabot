@@ -1,4 +1,4 @@
-#https://api.telegram.org/bot<7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00>/setWebhook?url=https://yourapp.onrender.com/webhook/<YOUR_TOKEN>
+#https://api.telegram.org/bot<7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00>/setWebhook?url=https://yourapp.onrender.com/webhook/<7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00>
 
 import os
 import json
@@ -59,7 +59,7 @@ async def error(update: object, context: ContextTypes.DEFAULT_TYPE):
     print(f'Update {update} caused error {context.error}')
 
 # --- Flask App Setup ---
-flask_app = Flask(__name__)
+app = Flask(__name__)
 
 # --- Telegram Application Setup ---
 telegram_app = Application.builder().token(TOKEN).build()
