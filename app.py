@@ -82,8 +82,9 @@ telegram_app.add_error_handler(error)
 @app.route(f'/webhook/{TOKEN}', methods=['POST'])
 def webhook():
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
-    telegram_app.create_task(telegram_app.process_update(update))
+    telegram_app.process_update(update)
     return 'ok', 200
+    
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
