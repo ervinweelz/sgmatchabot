@@ -45,18 +45,12 @@
             {
                 "text": "Kaminari Issa Silver",
                 "callback_data": "brand_ippodo",
-                "review": "8/10 Usucha \n7/10 Matcha Latte ",
+                "ratings": {
+                    "usucha": 4.5,
+                    "matcha_latte": 3.5
+                },
+                "notes": "Balanced umami, smooth finish; low bitterness. Great neat, decent in milk.",
                 "image_path": "images/KI.jpg"
-            },
-            {
-                "text": "Maru Matcha",
-                "callback_data": "brand_maru",
-                "review": "High-quality matcha powder with vibrant green color. Offers excellent value for daily consumption."
-            },
-            {
-                "text": "Aiya",
-                "callback_data": "brand_aiya",
-                "review": "Professional-grade matcha used by many cafes worldwide. Rich in antioxidants with deep umami taste."
             }
         ]
     }
