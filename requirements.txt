@@ -16,3 +16,4 @@ typing_extensions==4.14.0
 tzdata==2023.3
 Flask
 gunicorn
+requests
