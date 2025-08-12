@@ -1,3 +1,5 @@
+# https://api.telegram.org/bot<YOUR_TOKEN>/setWebhook?url=https://yourapp.onrender.com/webhook/<YOUR_TOKEN>
+
 from typing import Final
 import json
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
