@@ -1,3 +1,5 @@
+#https://api.telegram.org/bot<7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00>/setWebhook?url=https://yourapp.onrender.com/webhook/<YOUR_TOKEN>
+
 import os
 import json
 from flask import Flask, request
@@ -10,7 +12,7 @@ from commands import (
     recipes_command, quiz_command, reviews_command
 )
 
-TOKEN = os.environ.get("TELEGRAM_TOKEN", "YOUR_TOKEN_HERE")
+TOKEN = ("7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00")
 BOT_USERNAME = 'sgmatchabot'
 
 def load_json_data() -> dict:
