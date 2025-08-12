@@ -79,7 +79,7 @@ telegram_app.add_handler(MessageHandler(filters.TEXT, handle_message))
 telegram_app.add_error_handler(error)
 
 # --- Webhook Endpoint ---
-@flask_app.route(f'/webhook/{TOKEN}', methods=['POST'])
+@app.route(f'/webhook/{TOKEN}', methods=['POST'])
 def webhook():
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
     telegram_app.create_task(telegram_app.process_update(update))
