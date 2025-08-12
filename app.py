@@ -79,6 +79,11 @@ telegram_app.add_handler(MessageHandler(filters.TEXT, handle_message))
 telegram_app.add_error_handler(error)
 
 # --- Webhook Endpoint ---
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
 @app.route(f'/webhook/{TOKEN}', methods=['POST'])
 def webhook():
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
