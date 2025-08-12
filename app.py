@@ -1,5 +1,4 @@
 #https://api.telegram.org/bot7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00/setWebhook?url=https://sgmatchabot.onrender.com/webhook/7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00
-
 import os
 import json
 from flask import Flask, request, jsonify
@@ -19,12 +18,19 @@ TELEGRAM_API = f"https://api.telegram.org/bot{TOKEN}"
 app = Flask(__name__)
 
 # === Telegram helpers ===
-def tg_post(method: str, payload: dict):
+def tg_post_json(method: str, payload: dict):
     url = f"{TELEGRAM_API}/{method}"
     try:
-       _ = requests.post(url, json=payload, timeout=10)
+        requests.post(url, json=payload, timeout=10)
     except requests.RequestException:
-        pass  # keep it minimal
+        pass
+
+def tg_post_multipart(method: str, data: dict, files: dict):
+    url = f"{TELEGRAM_API}/{method}"
+    try:
+        requests.post(url, data=data, files=files, timeout=20)
+    except requests.RequestException:
+        pass
 
 def send_message(chat_id, text, parse_mode=None, reply_markup=None):
     payload = {"chat_id": chat_id, "text": text}
@@ -32,44 +38,67 @@ def send_message(chat_id, text, parse_mode=None, reply_markup=None):
         payload["parse_mode"] = parse_mode
     if reply_markup:
         payload["reply_markup"] = reply_markup
-    tg_post("sendMessage", payload)
+    tg_post_json("sendMessage", payload)
 
 def send_quiz_poll(chat_id, question, options, correct_index=0, explanation=None):
     payload = {
         "chat_id": chat_id,
         "question": question,
-        "options": options,
+        "options": options,             # list of strings
         "type": "quiz",
         "is_anonymous": True,
         "correct_option_id": int(correct_index),
     }
     if explanation:
         payload["explanation"] = explanation
-    tg_post("sendPoll", payload)
+    tg_post_json("sendPoll", payload)
+
+def send_photo(chat_id, photo, caption=None, parse_mode=None):
+    """
+    photo: URL string OR local file path (within repo)
+    Sends the image first; caption is supported but we won't use it for reviews (we send text separately).
+    """
+    if isinstance(photo, str) and photo.lower().startswith(("http://", "https://")):
+        payload = {"chat_id": chat_id, "photo": photo}
+        if caption:
+            payload["caption"] = caption[:1000]
+        if parse_mode:
+            payload["parse_mode"] = parse_mode
+        tg_post_json("sendPhoto", payload)
+    else:
+        if not photo or not os.path.exists(photo):
+            return
+        data = {"chat_id": str(chat_id)}
+        if caption:
+            data["caption"] = caption[:1000]
+        if parse_mode:
+            data["parse_mode"] = parse_mode
+        with open(photo, "rb") as f:
+            files = {"photo": f}
+            tg_post_multipart("sendPhoto", data, files)
 
 def inline_keyboard(rows):
-    """rows = [[{'text': 'A', 'callback_data': 'x'}, {...}], [...]]"""
     return {"inline_keyboard": rows}
 
-# === Data accessors ===
+# === Data access ===
 CMD = DATA.get("commands", {})
 RECIPES = DATA.get("recipes", {})
 REVIEWS = DATA.get("reviews", {})
 QUIZ = DATA.get("quiz", {})
 
-# Map recipe buttons -> recipe keys (by declared order)
+# Map recipe buttons -> recipe keys (based on known keys order)
 _recipe_buttons = RECIPES.get("buttons", [])
-_recipe_keys_in_order = [k for k in ["usucha", "matcha_latte"] if k in RECIPES]  # known keys from your JSON
+_known_recipe_keys = [k for k in ["usucha", "matcha_latte"] if k in RECIPES]
 RECIPE_CB_TO_KEY = {
-    btn["callback_data"]: _recipe_keys_in_order[i]
+    btn["callback_data"]: _known_recipe_keys[i]
     for i, btn in enumerate(_recipe_buttons)
-    if i < len(_recipe_keys_in_order)
+    if i < len(_known_recipe_keys)
 }
 
-# Map review brand callbacks -> review object
+# Map review brand callbacks -> brand objects
 REVIEW_BRANDS = {b["callback_data"]: b for b in REVIEWS.get("brands", [])}
 
-# === Command handlers (pulling from JSON) ===
+# === Command handlers (use JSON content) ===
 def handle_start(chat_id):
     text = CMD.get("start", {}).get("response", "Welcome!")
     send_message(chat_id, text)
@@ -87,13 +116,11 @@ def handle_tele_channel(chat_id):
     send_message(chat_id, block.get("text", "Join the channel"), parse_mode=block.get("parse_mode"))
 
 def handle_recipes(chat_id):
-    # Show top-level recipe buttons from JSON
     buttons = RECIPES.get("buttons", [])
     rows = [[{"text": b["text"], "callback_data": b["callback_data"]}] for b in buttons]
     send_message(chat_id, "Choose a recipe:", reply_markup=inline_keyboard(rows))
 
 def handle_reviews(chat_id):
-    # Show top-level reviews menu buttons (e.g., Matcha Brands / Service Review)
     buttons = REVIEWS.get("buttons", [])
     rows = [[{"text": b["text"], "callback_data": b["callback_data"]}] for b in buttons]
     send_message(chat_id, "Reviews menu:", reply_markup=inline_keyboard(rows))
@@ -105,7 +132,7 @@ def handle_quiz(chat_id):
     correct_idx = next((i for i, o in enumerate(opts) if o.get("correct")), 0)
     send_quiz_poll(chat_id, question, option_texts, correct_index=correct_idx)
 
-# === Flask routes ===
+# === Routes ===
 @app.route("/", methods=["GET"])
 def health():
     return jsonify(status="ok"), 200
@@ -114,13 +141,13 @@ def health():
 def webhook():
     update = request.get_json(silent=True) or {}
 
-    # Handle button presses
+    # --- Inline button presses ---
     if "callback_query" in update:
         cq = update["callback_query"]
         chat_id = cq["message"]["chat"]["id"]
         data = cq.get("data", "")
 
-        # Recipe buttons -> show recipe details
+        # Recipes: details
         if data in RECIPE_CB_TO_KEY:
             key = RECIPE_CB_TO_KEY[data]
             recipe = RECIPES.get(key, {})
@@ -130,7 +157,7 @@ def webhook():
             send_message(chat_id, text)
             return "ok", 200
 
-        # Reviews: top-level "Matcha Brands" expands into brand list
+        # Reviews: show brand list
         if data == "review_matcha_brands":
             brand_rows = [[{"text": b["text"], "callback_data": b["callback_data"]}] for b in REVIEWS.get("brands", [])]
             send_message(chat_id, "Choose a brand:", reply_markup=inline_keyboard(brand_rows))
@@ -141,16 +168,29 @@ def webhook():
             send_message(chat_id, "Service review coming soon.")
             return "ok", 200
 
-        # Reviews: specific brand selected
+        # Reviews: specific brand -> send image first, then text
         if data in REVIEW_BRANDS:
-            send_message(chat_id, REVIEW_BRANDS[data].get("review", "No review yet."))
+            brand = REVIEW_BRANDS[data]
+            img_url = brand.get("image_url")
+            img_path = brand.get("image_path")
+            review_text = f"{brand.get('text', '')}\n\n{brand.get('review', '')}".strip() or "No review yet."
+
+            if img_url:
+                send_photo(chat_id, img_url)           # 1) image
+                send_message(chat_id, review_text)      # 2) text
+            elif img_path:
+                send_photo(chat_id, img_path)           # 1) image
+                send_message(chat_id, review_text)      # 2) text
+            else:
+                send_message(chat_id, review_text)
+
             return "ok", 200
 
         # Fallback
         send_message(chat_id, "Unknown action.")
         return "ok", 200
 
-    # Handle messages/commands
+    # --- Text messages / commands ---
     if "message" in update:
         msg = update["message"]
         chat_id = msg["chat"]["id"]
