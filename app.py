@@ -26,3 +26,5 @@ def webhook():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
+#https://api.telegram.org/bot7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00/setWebhook?url=https://sgmatchabot.onrender.com/webhook/7971717836:AAEg-0paQG3qBzbYOfvnpkY4DQHRk6YAj00
