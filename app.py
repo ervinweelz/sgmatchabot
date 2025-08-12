@@ -80,6 +80,17 @@ def send_photo(chat_id, photo, caption=None, parse_mode=None):
 def inline_keyboard(rows):
     return {"inline_keyboard": rows}
 
+def star_bar(rating):
+    """Return a 5-star bar. We show full stars and empties; decimals are shown numerically."""
+    try:
+        r = max(0.0, min(5.0, float(rating)))
+    except (TypeError, ValueError):
+        return "N/A"
+    full = int(r)                   # full stars
+    empty = 5 - full                # we don't render half-star glyphs for reliability
+    return "★" * full + "☆" * empty
+
+
 # === Data access ===
 CMD = DATA.get("commands", {})
 RECIPES = DATA.get("recipes", {})
@@ -168,23 +179,40 @@ def webhook():
             send_message(chat_id, "Service review coming soon.")
             return "ok", 200
 
-        # Reviews: specific brand -> send image first, then text
+        # Reviews: specific brand -> send image first, then text (with star ratings)
         if data in REVIEW_BRANDS:
             brand = REVIEW_BRANDS[data]
             img_url = brand.get("image_url")
             img_path = brand.get("image_path")
-            review_text = f"{brand.get('text', '')}\n\n{brand.get('review', '')}".strip() or "No review yet."
 
+            # Build the text from ratings
+            ratings = brand.get("ratings", {})
+            u = ratings.get("usucha")
+            l = ratings.get("matcha_latte")
+
+            lines = [brand.get("text", "")]
+            if u is not None:
+                lines.append(f"Usucha: {star_bar(u)} ({u}/5)")
+            if l is not None:
+                lines.append(f"Matcha Latte: {star_bar(l)} ({l}/5)")
+            if brand.get("notes"):
+                lines.append("")
+                lines.append(brand["notes"])
+
+            review_text = "\n".join(lines).strip() or "No review yet."
+
+            # 1) image, 2) text
             if img_url:
-                send_photo(chat_id, img_url)           # 1) image
-                send_message(chat_id, review_text)      # 2) text
+                send_photo(chat_id, img_url)
+                send_message(chat_id, review_text)
             elif img_path:
-                send_photo(chat_id, img_path)           # 1) image
-                send_message(chat_id, review_text)      # 2) text
+                send_photo(chat_id, img_path)
+                send_message(chat_id, review_text)
             else:
                 send_message(chat_id, review_text)
 
             return "ok", 200
+
 
         # Fallback
         send_message(chat_id, "Unknown action.")
