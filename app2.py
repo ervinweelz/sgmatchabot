@@ -2,8 +2,7 @@ import os
 from flask import Flask, request
 import requests
 
-TOKEN = os.environ.get("TELEGRAM_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN")
-WEBHOOK_SECRET = os.environ.get("WEBHOOK_SECRET", "secret")  # Optional for extra security
+TOKEN = os.environ.get("TELEGRAM_TOKEN")
 
 app = Flask(__name__)
 
@@ -12,7 +11,7 @@ def send_message(chat_id, text):
     payload = {"chat_id": chat_id, "text": text}
     requests.post(url, json=payload)
 
-@app.route(f"/webhook/{WEBHOOK_SECRET}", methods=["POST"])
+@app.route(f"/webhook/{TOKEN}", methods=["POST"])
 def webhook():
     data = request.get_json()
     if "message" in data:
