@@ -45,8 +45,8 @@
             {
                 "text": "Kaminari Issa Silver",
                 "callback_data": "brand_ippodo",
-                "review": "A premium matcha from Ippodo Tea Co. Known for its balanced umami flavor and smooth finish. Perfect for ceremonial use.",
-                "image_path": "images/test.jpg"
+                "review": "8/10 Usucha \n7/10 Matcha Latte ",
+                "image_path": "images/KI.jpg"
             },
             {
                 "text": "Maru Matcha",
