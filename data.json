@@ -51,26 +51,6 @@
                 },
                 "notes": "Balanced umami, smooth finish; low bitterness. Decent with oatside barista blend.",
                 "image_path": "images/KI.jpg"
-            },
-            {
-                "text": "Fuji-no-Shiro",
-                "callback_data": "brand_fuji",
-                "ratings": {
-                    "usucha": ? ,
-                    "matcha_latte": 5
-                },
-                "notes": "Amazing aftertaste and smooth finish; Amazing as an latte.",
-                
-            }, 
-            {
-                "text": "Taizen",
-                "callback_data": "brand_taizen",
-                "ratings": {
-                    "usucha": 4 ,
-                    "matcha_latte": ?
-                },
-                "notes": "Nutty taste. Decent as a gift.",
-               
             }
             
         ]
