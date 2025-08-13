@@ -41,40 +41,19 @@
       {
         "text": "Kaminari Issa Silver",
         "callback_data": "brand_ippodo",
-        "ratings": { "usucha": 4.5, "matcha_latte": 3.5 },
+        "ratings": { "usucha": 4, "matcha_latte": 3 },
         "notes": "Balanced umami, smooth finish; low bitterness. Great neat, decent in milk.",
-        "image_path": "images/KI.jpg"
-      },
-      {
-        "text": "Maru Matcha",
-        "callback_data": "brand_maru",
-        "ratings": { "usucha": 4.0, "matcha_latte": 4.2 },
-        "notes": "Vibrant green; solid everyday pick.",
-        "image_url": "https://raw.githubusercontent.com/<you>/<repo>/main/images/maru.jpg"
+        "image_path": "images/brands/KI.jpg"
       }
     ],
 
     "cafes": [
       {
-        "text": "Hvala (Somerset)",
-        "callback_data": "cafe_hvala_somerset",
-        "ratings": { "usucha": 4.3, "matcha_latte": 4.6 },
-        "notes": "Smooth usucha; latte is creamy with balanced sweetness.",
-        "image_path": "images/cafes/hvala_somerset.jpg"
-      },
-      {
-        "text": "Matchaya (Takashimaya)",
-        "callback_data": "cafe_matchaya_taka",
-        "ratings": { "usucha": 3.9, "matcha_latte": 4.2 },
-        "notes": "Lattes shine; usucha slightly lighter in body.",
-        "image_url": "https://raw.githubusercontent.com/<you>/<repo>/main/images/cafes/matchaya_taka.jpg"
-      },
-      {
-        "text": "TSUJIRI (Clarke Quay)",
-        "callback_data": "cafe_tsujiri_cq",
-        "ratings": { "usucha": 4.0, "matcha_latte": 3.8 },
-        "notes": "Classic profile, gentle bitterness; latte a bit sweet.",
-        "image_path": "images/cafes/tsujiri_cq.jpg"
+        "text": "Volks(One Raffles Quay)",
+        "callback_data": "cafe_volks",
+        "ratings": { "usucha": 0, "matcha_latte": 3 },
+        "notes": "Smooth genmaicha; roasty with balanced sweetness.",
+        "image_path": "images/cafes/volks_gen.jpg"
       }
     ]
   },
