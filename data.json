@@ -3,11 +3,11 @@
     "start": { "response": "Welcome my fellow Matcha lovers 🍵" },
     "about": {
       "text": "🤖 SGMATCHA 🤖\nHi there fellow matcha lovers...",
-      "parse_mode": "MarkdownV2"
+      "parse_mode": "HTML"
     },
     "matcha101": {
       "text": "🍵 WHY MATCHA 🍵\nMatcha is a powdered green tea...",
-      "parse_mode": "MarkdownV2"
+      "parse_mode": "HTML"
     },
     "channel": {
       "text": "Join my matcha Tele channel 😎  https://t.me/+QxqtsjTl5dZlMmM1",
