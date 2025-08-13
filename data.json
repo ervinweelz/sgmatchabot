@@ -18,8 +18,8 @@
     },
     "recipes": {
         "buttons": [
-            {"text": "🍵 Usucha", "callback_data": "button_1"},
-            {"text": "🍵🥛 Matcha Latte", "callback_data": "button_2"}
+            {"text": "Usucha 🍵", "callback_data": "button_1"},
+            {"text": "Matcha Latte 🍵🥛", "callback_data": "button_2"}
         ],
         "usucha": {
             "ingredients": ["4g of Matcha Powder", "120ml of non boiling water, about 80°C"],
