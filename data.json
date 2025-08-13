@@ -1,67 +1,91 @@
 {
-    "commands": {
-        "start": {
-            "response": "Welcome my fellow Matcha lovers 🍵"
-        },
-        "about": {
-            "text": "🤖 SGMATCHA 🤖\nHi there fellow matcha lovers 💚 , this is a bot I have created to document down my journey in SG 🇸🇬 so far into the world of matcha 🍵\n\nFeel free to use this bot to get the latest recipes, very biased reviews and random content that I'll be adding here 😎\n\nDisclaimer : I am in no way an expert in matcha, this serves as my matcha journal for everyone to read",
-            "parse_mode": "MarkdownV2"
-        },
-        "matcha101": {
-            "text": "🍵 WHY MATCHA 🍵\nMatcha is a powdered green tea where you drink the entire leaf 🌱, giving you more nutrients than regular steeped tea 🤯\n\nKey Health Benefits\n🧠 Improved Brain Function\n❤️‍🔥 Better Heart Health\n🏋️ Weight Management\n💪 Antioxidant Power\n\nQuick Tips for Maximum Benefit\n• Start small ¼ tsp to adjust to the taste\n• Store properly in fridge to preserve nutrients\n• Can mix with water or milk based on preference\n• No special equipment needed for basic preparation",
-            "parse_mode": "MarkdownV2"
-        },
-        "channel": {
-            "text": "Join my matcha Tele channel 😎  https://t.me/+QxqtsjTl5dZlMmM1",
-            "parse_mode": null
-        }
+  "commands": {
+    "start": { "response": "Welcome my fellow Matcha lovers 🍵" },
+    "about": {
+      "text": "🤖 SGMATCHA 🤖\nHi there fellow matcha lovers...",
+      "parse_mode": "MarkdownV2"
     },
-    "recipes": {
-        "buttons": [
-            {"text": "🍵 Usucha", "callback_data": "button_1"},
-            {"text": "🍵🥛 Matcha Latte", "callback_data": "button_2"}
-        ],
-        "usucha": {
-            "ingredients": ["4g of Matcha Powder", "120ml of non boiling water, about 80°C"],
-            "directions": ["Soften Whisk in 80°C water", "Sieve 1 scoop of powder", "Add 20ml to blend powder", "Add in remaining water", "Whisk for 2 mins in a bowl, no grains and foamy", "Enjoy 🤤"]
-        },
-        "matcha_latte": {
-            "ingredients": ["6g of Matcha Powder", "30ml of non boiling water, about 80°C", "120ml of oat milk, prefably oatside barista", "1 tsp sugar"],
-            "directions": ["Soften Whisk in 80 deg water for 5 mins", "Sieve 2 scoops of powder", "Add 30ml of water", "Whisk for 2 mins in a bowl, no grains and thick consistency", "Whisk in sugar", "Prepare Cup, add Ice", "Add oatmilk into cup", "Add the whisked Matcha slowly", "Enjoy 🤤"]
-        }
+    "matcha101": {
+      "text": "🍵 WHY MATCHA 🍵\nMatcha is a powdered green tea...",
+      "parse_mode": "MarkdownV2"
     },
-   "reviews": {
-        "buttons": [
-            {
-                "text": "Matcha Brands",
-                "callback_data": "review_matcha_brands"
-            },
-            {
-                "text": "Service Review",
-                "callback_data": "review_service"
-            }
-        ],
-        "brands": [
-            {
-                "text": "Kaminari Issa Silver",
-                "callback_data": "brand_ippodo",
-                "ratings": {
-                    "usucha": 4.5,
-                    "matcha_latte": 3.5
-                },
-                "notes": "Balanced umami, smooth finish; low bitterness. Great neat, decent in milk.",
-                "image_path": "images/KI.jpg"
-            }
-        ]
+    "channel": {
+      "text": "Join my matcha Tele channel 😎  https://t.me/+QxqtsjTl5dZlMmM1",
+      "parse_mode": null
     }
-       , 
-    "quiz": {
-        "question": "What is the traditional Japanese tea ceremony called 🤔",
-        "options": [
-            {"text": "Chanoyu", "data": "quiz_1", "correct": true},
-            {"text": "Gyokuro", "data": "quiz_2"},
-            {"text": "Sencha", "data": "quiz_3"},
-            {"text": "Matcha-do", "data": "quiz_4"}
-        ]
+  },
+
+  "recipes": {
+    "buttons": [
+      { "text": "🍵 Usucha", "callback_data": "button_1" },
+      { "text": "🍵🥛 Matcha Latte", "callback_data": "button_2" }
+    ],
+    "usucha": {
+      "ingredients": ["4g of Matcha Powder", "120ml of non boiling water, about 80°C"],
+      "directions": ["Soften Whisk in 80°C water", "Sieve 1 scoop of powder", "Add 20ml to blend powder", "Add in remaining water", "Whisk for 2 mins in a bowl, no grains and foamy", "Enjoy 🤤"]
+    },
+    "matcha_latte": {
+      "ingredients": ["6g of Matcha Powder", "30ml of non boiling water, about 80°C", "120ml of oat milk, prefably oatside barista", "1 tsp sugar"],
+      "directions": ["Soften Whisk in 80 deg water for 5 mins", "Sieve 2 scoops of powder", "Add 30ml of water", "Whisk for 2 mins in a bowl, no grains and thick consistency", "Whisk in sugar", "Prepare Cup, add Ice", "Add oatmilk into cup", "Add the whisked Matcha slowly", "Enjoy 🤤"]
     }
+  },
+
+  "reviews": {
+    "buttons": [
+      { "text": "Matcha Brands", "callback_data": "review_matcha_brands" },
+      { "text": "Cafes in Singapore", "callback_data": "review_cafes" },
+      { "text": "Service Review", "callback_data": "review_service" }
+    ],
+
+    "brands": [
+      {
+        "text": "Kaminari Issa Silver",
+        "callback_data": "brand_ippodo",
+        "ratings": { "usucha": 4.5, "matcha_latte": 3.5 },
+        "notes": "Balanced umami, smooth finish; low bitterness. Great neat, decent in milk.",
+        "image_path": "images/KI.jpg"
+      },
+      {
+        "text": "Maru Matcha",
+        "callback_data": "brand_maru",
+        "ratings": { "usucha": 4.0, "matcha_latte": 4.2 },
+        "notes": "Vibrant green; solid everyday pick.",
+        "image_url": "https://raw.githubusercontent.com/<you>/<repo>/main/images/maru.jpg"
+      }
+    ],
+
+    "cafes": [
+      {
+        "text": "Hvala (Somerset)",
+        "callback_data": "cafe_hvala_somerset",
+        "ratings": { "usucha": 4.3, "matcha_latte": 4.6 },
+        "notes": "Smooth usucha; latte is creamy with balanced sweetness.",
+        "image_path": "images/cafes/hvala_somerset.jpg"
+      },
+      {
+        "text": "Matchaya (Takashimaya)",
+        "callback_data": "cafe_matchaya_taka",
+        "ratings": { "usucha": 3.9, "matcha_latte": 4.2 },
+        "notes": "Lattes shine; usucha slightly lighter in body.",
+        "image_url": "https://raw.githubusercontent.com/<you>/<repo>/main/images/cafes/matchaya_taka.jpg"
+      },
+      {
+        "text": "TSUJIRI (Clarke Quay)",
+        "callback_data": "cafe_tsujiri_cq",
+        "ratings": { "usucha": 4.0, "matcha_latte": 3.8 },
+        "notes": "Classic profile, gentle bitterness; latte a bit sweet.",
+        "image_path": "images/cafes/tsujiri_cq.jpg"
+      }
+    ]
+  },
+
+  "quiz": {
+    "question": "What is the traditional Japanese tea ceremony called 🤔",
+    "options": [
+      { "text": "Chanoyu", "data": "quiz_1", "correct": true },
+      { "text": "Gyokuro", "data": "quiz_2" },
+      { "text": "Sencha", "data": "quiz_3" },
+      { "text": "Matcha-do", "data": "quiz_4" }
+    ]
+  }
 }

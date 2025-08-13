@@ -44,7 +44,7 @@ def send_quiz_poll(chat_id, question, options, correct_index=0, explanation=None
     payload = {
         "chat_id": chat_id,
         "question": question,
-        "options": options,             # list of strings
+        "options": options,  # list[str]
         "type": "quiz",
         "is_anonymous": True,
         "correct_option_id": int(correct_index),
@@ -54,10 +54,7 @@ def send_quiz_poll(chat_id, question, options, correct_index=0, explanation=None
     tg_post_json("sendPoll", payload)
 
 def send_photo(chat_id, photo, caption=None, parse_mode=None):
-    """
-    photo: URL string OR local file path (within repo)
-    Sends the image first; caption is supported but we won't use it for reviews (we send text separately).
-    """
+    """photo: URL or local path. Sends image; we send text separately afterwards."""
     if isinstance(photo, str) and photo.lower().startswith(("http://", "https://")):
         payload = {"chat_id": chat_id, "photo": photo}
         if caption:
@@ -65,31 +62,31 @@ def send_photo(chat_id, photo, caption=None, parse_mode=None):
         if parse_mode:
             payload["parse_mode"] = parse_mode
         tg_post_json("sendPhoto", payload)
-    else:
-        if not photo or not os.path.exists(photo):
-            return
-        data = {"chat_id": str(chat_id)}
-        if caption:
-            data["caption"] = caption[:1000]
-        if parse_mode:
-            data["parse_mode"] = parse_mode
-        with open(photo, "rb") as f:
-            files = {"photo": f}
-            tg_post_multipart("sendPhoto", data, files)
+        return
+
+    if not photo or not os.path.exists(photo):
+        return
+    data = {"chat_id": str(chat_id)}
+    if caption:
+        data["caption"] = caption[:1000]
+    if parse_mode:
+        data["parse_mode"] = parse_mode
+    with open(photo, "rb") as f:
+        files = {"photo": f}
+        tg_post_multipart("sendPhoto", data, files)
 
 def inline_keyboard(rows):
     return {"inline_keyboard": rows}
 
 def star_bar(rating):
-    """Return a 5-star bar. We show full stars and empties; decimals are shown numerically."""
+    """Return a 5-star bar without half-star glyphs (for reliability across clients)."""
     try:
         r = max(0.0, min(5.0, float(rating)))
     except (TypeError, ValueError):
         return "N/A"
-    full = int(r)                   # full stars
-    empty = 5 - full                # we don't render half-star glyphs for reliability
+    full = int(r)
+    empty = 5 - full
     return "★" * full + "☆" * empty
-
 
 # === Data access ===
 CMD = DATA.get("commands", {})
@@ -97,7 +94,7 @@ RECIPES = DATA.get("recipes", {})
 REVIEWS = DATA.get("reviews", {})
 QUIZ = DATA.get("quiz", {})
 
-# Map recipe buttons -> recipe keys (based on known keys order)
+# Recipes mapping (by order of known keys)
 _recipe_buttons = RECIPES.get("buttons", [])
 _known_recipe_keys = [k for k in ["usucha", "matcha_latte"] if k in RECIPES]
 RECIPE_CB_TO_KEY = {
@@ -106,10 +103,11 @@ RECIPE_CB_TO_KEY = {
     if i < len(_known_recipe_keys)
 }
 
-# Map review brand callbacks -> brand objects
+# Reviews: brands & cafes mappings
 REVIEW_BRANDS = {b["callback_data"]: b for b in REVIEWS.get("brands", [])}
+REVIEW_CAFES  = {c["callback_data"]: c for c in REVIEWS.get("cafes", [])}
 
-# === Command handlers (use JSON content) ===
+# === Command handlers ===
 def handle_start(chat_id):
     text = CMD.get("start", {}).get("response", "Welcome!")
     send_message(chat_id, text)
@@ -143,6 +141,22 @@ def handle_quiz(chat_id):
     correct_idx = next((i for i, o in enumerate(opts) if o.get("correct")), 0)
     send_quiz_poll(chat_id, question, option_texts, correct_index=correct_idx)
 
+def build_review_text(item):
+    """Common renderer for brand or cafe review text."""
+    lines = [item.get("text", "")]
+    ratings = item.get("ratings", {})
+    u = ratings.get("usucha")
+    l = ratings.get("matcha_latte")
+    if u is not None:
+        lines.append(f"Usucha: {star_bar(u)} ({u}/5)")
+    if l is not None:
+        lines.append(f"Matcha Latte: {star_bar(l)} ({l}/5)")
+    notes = item.get("notes")
+    if notes:
+        lines.append("")
+        lines.append(notes)
+    return "\n".join(lines).strip() or "No review yet."
+
 # === Routes ===
 @app.route("/", methods=["GET"])
 def health():
@@ -168,10 +182,16 @@ def webhook():
             send_message(chat_id, text)
             return "ok", 200
 
-        # Reviews: show brand list
+        # Reviews: show brands list
         if data == "review_matcha_brands":
             brand_rows = [[{"text": b["text"], "callback_data": b["callback_data"]}] for b in REVIEWS.get("brands", [])]
             send_message(chat_id, "Choose a brand:", reply_markup=inline_keyboard(brand_rows))
+            return "ok", 200
+
+        # Reviews: show cafes list
+        if data == "review_cafes":
+            cafe_rows = [[{"text": c["text"], "callback_data": c["callback_data"]}] for c in REVIEWS.get("cafes", [])]
+            send_message(chat_id, "Choose a cafe:", reply_markup=inline_keyboard(cafe_rows))
             return "ok", 200
 
         # Reviews: service review placeholder
@@ -179,29 +199,12 @@ def webhook():
             send_message(chat_id, "Service review coming soon.")
             return "ok", 200
 
-        # Reviews: specific brand -> send image first, then text (with star ratings)
+        # Brand picked
         if data in REVIEW_BRANDS:
-            brand = REVIEW_BRANDS[data]
-            img_url = brand.get("image_url")
-            img_path = brand.get("image_path")
-
-            # Build the text from ratings
-            ratings = brand.get("ratings", {})
-            u = ratings.get("usucha")
-            l = ratings.get("matcha_latte")
-
-            lines = [brand.get("text", "")]
-            if u is not None:
-                lines.append(f"Usucha: {star_bar(u)} ({u}/5)")
-            if l is not None:
-                lines.append(f"Matcha Latte: {star_bar(l)} ({l}/5)")
-            if brand.get("notes"):
-                lines.append("")
-                lines.append(brand["notes"])
-
-            review_text = "\n".join(lines).strip() or "No review yet."
-
-            # 1) image, 2) text
+            item = REVIEW_BRANDS[data]
+            img_url = item.get("image_url")
+            img_path = item.get("image_path")
+            review_text = build_review_text(item)
             if img_url:
                 send_photo(chat_id, img_url)
                 send_message(chat_id, review_text)
@@ -210,9 +213,23 @@ def webhook():
                 send_message(chat_id, review_text)
             else:
                 send_message(chat_id, review_text)
-
             return "ok", 200
 
+        # Cafe picked
+        if data in REVIEW_CAFES:
+            item = REVIEW_CAFES[data]
+            img_url = item.get("image_url")
+            img_path = item.get("image_path")
+            review_text = build_review_text(item)
+            if img_url:
+                send_photo(chat_id, img_url)
+                send_message(chat_id, review_text)
+            elif img_path:
+                send_photo(chat_id, img_path)
+                send_message(chat_id, review_text)
+            else:
+                send_message(chat_id, review_text)
+            return "ok", 200
 
         # Fallback
         send_message(chat_id, "Unknown action.")
@@ -238,8 +255,12 @@ def webhook():
             handle_reviews(chat_id)
         elif text in ("/quiz", "quiz"):
             handle_quiz(chat_id)
+        elif text in ("/cafes", "cafes"):
+            # convenience command to jump straight to the cafes list
+            cafe_rows = [[{"text": c["text"], "callback_data": c["callback_data"]}] for c in REVIEWS.get("cafes", [])]
+            send_message(chat_id, "Choose a cafe:", reply_markup=inline_keyboard(cafe_rows))
         else:
-            send_message(chat_id, "Unknown command. Try: /about /matcha101 /tele_channel /recipes /reviews /quiz")
+            send_message(chat_id, "Unknown command. Try: /about /matcha101 /tele_channel /recipes /reviews /quiz /cafes")
 
     return "ok", 200
 
