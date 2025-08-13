@@ -46,13 +46,35 @@
                 "text": "Kaminari Issa Silver",
                 "callback_data": "brand_ippodo",
                 "ratings": {
-                    "usucha": 4.5,
-                    "matcha_latte": 3.5
+                    "usucha": 4,
+                    "matcha_latte": 3
                 },
-                "notes": "Balanced umami, smooth finish; low bitterness. Great neat, decent in milk.",
+                "notes": "Balanced umami, smooth finish; low bitterness. Decent with oatside barista blend.",
                 "image_path": "images/KI.jpg"
+            },
+            {
+                "text": "Fuji-no-Shiro",
+                "callback_data": "brand_fuji",
+                "ratings": {
+                    "usucha": ? ,
+                    "matcha_latte": 5
+                },
+                "notes": "Amazing aftertaste and smooth finish; Amazing as an latte.",
+                "image_path": "images/fuji.jpg"
+            }, 
+            {
+                "text": "Taizen",
+                "callback_data": "brand_taizen",
+                "ratings": {
+                    "usucha": 4 ,
+                    "matcha_latte": ?
+                },
+                "notes": "Nutty taste. Decent as a gift.",
+                "image_path": "images/taizen.jpg"
             }
+            
         ]
+       
     }
        , 
     "quiz": {
