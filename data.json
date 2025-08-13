@@ -60,7 +60,7 @@
                     "matcha_latte": 5
                 },
                 "notes": "Amazing aftertaste and smooth finish; Amazing as an latte.",
-                "image_path": "images/fuji.jpg"
+                
             }, 
             {
                 "text": "Taizen",
@@ -70,7 +70,7 @@
                     "matcha_latte": ?
                 },
                 "notes": "Nutty taste. Decent as a gift.",
-                "image_path": "images/taizen.jpg"
+               
             }
             
         ]
