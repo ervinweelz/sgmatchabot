@@ -49,7 +49,7 @@
 
     "cafes": [
       {
-        "text": "Volks(One Raffles Quay)",
+        "text": "Volks (One Raffles Quay)",
         "callback_data": "cafe_volks",
         "ratings": { "usucha": 0, "matcha_latte": 3 },
         "notes": "Smooth genmaicha; roasty with balanced sweetness.",
