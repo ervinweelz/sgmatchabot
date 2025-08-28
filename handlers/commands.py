@@ -1,5 +1,5 @@
 from telegram_helpers import send_message, send_quiz_poll, inline_keyboard
-from . import content
+
 
 def handle_message(msg, data):
     chat_id = msg["chat"]["id"]
