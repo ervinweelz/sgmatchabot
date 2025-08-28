@@ -66,5 +66,52 @@
       { "text": "Sencha", "data": "quiz_3" },
       { "text": "Matcha-do", "data": "quiz_4" }
     ]
+  }, 
+  "content": {
+    "tips": [
+      "Use water at 70–80°C to avoid bitterness.",
+      "Sift your matcha before whisking to avoid clumps.",
+      "Whisk in an M motion for better froth."
+    ],
+    "glossary": [
+      { "term": "Usucha", "definition": "Thin tea made with ~2g matcha and 60–90ml water." },
+      { "term": "Koicha", "definition": "Thick tea made with 4g matcha and 30–40ml water." },
+      { "term": "Chashaku", "definition": "Bamboo scoop used to measure matcha." },
+      { "term": "Chawan", "definition": "Tea bowl used in Japanese tea ceremony." },
+      { "term": "Chasen", "definition": "Bamboo whisk used to mix matcha with water." }
+    ],
+    "grades": [
+      {
+        "name": "Ceremonial Grade",
+        "description": "Highest quality matcha made from the youngest tea leaves. Best for drinking straight."
+      },
+      {
+        "name": "Premium Grade",
+        "description": "Good quality matcha suitable for everyday drinking and lattes."
+      },
+      {
+        "name": "Culinary Grade",
+        "description": "Used for baking, cooking, and smoothies. More bitter, stronger flavor."
+      }
+    ],
+    "tools": [
+      {
+        "name": "Chasen",
+        "description": "A bamboo whisk with fine prongs used to froth matcha.",
+        "image": "https://example.com/images/chasen.jpg"
+      },
+      {
+        "name": "Chawan",
+        "description": "A wide, open tea bowl ideal for whisking matcha.",
+        "image": "https://example.com/images/chawan.jpg"
+      },
+      {
+        "name": "Chashaku",
+        "description": "A bamboo scoop used to portion matcha powder.",
+        "image": "https://example.com/images/chashaku.jpg"
+      }
+    ]
   }
 }
+
+
