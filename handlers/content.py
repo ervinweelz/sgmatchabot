@@ -114,9 +114,9 @@ def handle_tools(chat_id, data):
             send_message(chat_id, caption, parse_mode="Markdown")
 
 # ---------- /timer ----------
-def handle_timer(chat_id):
-    send_message(chat_id, "⏱️ Timer started: 2 minutes")
-    time.sleep(60)
-    send_message(chat_id, "1 minute left...")
-    time.sleep(60)
-    send_message(chat_id, "✅ Done! Enjoy your matcha.")
+# def handle_timer(chat_id):
+#     send_message(chat_id, "⏱️ Timer started: 2 minutes")
+#     time.sleep(60)
+#     send_message(chat_id, "1 minute left...")
+#     time.sleep(60)
+#     send_message(chat_id, "✅ Done! Enjoy your matcha.")

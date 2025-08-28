@@ -52,7 +52,7 @@ def handle_message(msg, data):
     def handle_glossary(): content.handle_glossary(chat_id, data)
     def handle_grades(): content.handle_grades(chat_id, data)
     def handle_tools(): content.handle_tools(chat_id, data)
-    def handle_timer(): content.handle_timer(chat_id)
+    # def handle_timer(): content.handle_timer(chat_id)
 
     command_map = {
         "/start": handle_start, "start": handle_start,
@@ -68,7 +68,7 @@ def handle_message(msg, data):
         "/glossary": handle_glossary, "glossary": handle_glossary,
         "/grades": handle_grades, "grades": handle_grades,
         "/tools": handle_tools, "tools": handle_tools,
-        "/timer": handle_timer, "timer": handle_timer
+        # "/timer": handle_timer, "timer": handle_timer
     }
 
     (command_map.get(text.split()[0]) or (lambda: send_message(chat_id, "Unknown command.")))()
