@@ -1,4 +1,5 @@
 from telegram_helpers import send_message, send_quiz_poll, inline_keyboard
+from . import content  # new (for brew/glossary callbacks)
 
 
 def handle_message(msg, data):
