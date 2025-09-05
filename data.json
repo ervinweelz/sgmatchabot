@@ -18,7 +18,9 @@
   "recipes": {
     "buttons": [
       { "text": "🍵 Usucha", "callback_data": "button_1" },
-      { "text": "🍵🥛 Matcha Latte", "callback_data": "button_2" }
+      { "text": "🍵🥛 Matcha Latte", "callback_data": "button_2" },
+       { "text": "🍵🍮 Matcha Beancurd", "callback_data": "button_3" }
+
     ],
     "usucha": {
       "ingredients": ["4g of Matcha Powder", "120ml of non boiling water, about 80°C"],
@@ -27,7 +29,12 @@
     "matcha_latte": {
       "ingredients": ["6g of Matcha Powder", "30ml of non boiling water, about 80°C", "120ml of oat milk, prefably oatside barista", "1 tsp sugar"],
       "directions": ["Soften Whisk in 80 deg water for 5 mins", "Sieve 2 scoops of powder", "Add 30ml of water", "Whisk for 2 mins in a bowl, no grains and thick consistency", "Whisk in sugar", "Prepare Cup, add Ice", "Add oatmilk into cup", "Add the whisked Matcha slowly", "Enjoy 🤤"]
+    },
+    "matcha_beancurd": {
+      "ingredients": ["4g of Matcha Powder", "30ml of non boiling water, about 80°C", "1 LaoBan Beancurd"],
+      "directions": ["Soften Whisk in 80 deg water for 5 mins", "Sieve 1.5 scoops of powder", "Add 30ml of water", "Whisk for 2 mins in a bowl, no grains and thick consistency", "Pour into beancurd and mix well", "Enjoy 🤤"]
     }
+
   },
 
   "reviews": {
