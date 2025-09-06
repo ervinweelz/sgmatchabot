@@ -14,7 +14,7 @@ def handle_callback_query(cq, data):
     # Map recipe button callback_data to their recipe keys (e.g., 'usucha')
     RECIPE_CB_TO_KEY = {
         btn["callback_data"]: key
-        for btn, key in zip(RECIPES.get("buttons", []), [k for k in ["usucha", "matcha_latte"] if k in RECIPES])
+        for btn, key in zip(RECIPES.get("buttons", []), [k for k in ["usucha", "matcha_latte", "matcha_beancurd"] if k in RECIPES])
     }
 
     # Map review brand and cafe callback_data to their full data blocks
